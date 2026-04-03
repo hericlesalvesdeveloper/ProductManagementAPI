@@ -11,6 +11,13 @@ public class ProductContext : DbContext
         
     }
 
+    // cria um filtro global para não trazer os registros onde o deletedAt é diferente de nulo
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Product>()
+        .HasQueryFilter(p => p.DeletedAt == null);
+    }
+
     public DbSet<Product> Products { get; set; }
 
 }

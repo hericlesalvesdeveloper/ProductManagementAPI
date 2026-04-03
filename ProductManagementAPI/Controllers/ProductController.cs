@@ -6,4 +6,5 @@ namespace ProductManagementAPI.Controllers;
 [Route("[controller]")]
 public class ProductController : ControllerBase
 {
+
 }

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProductManagementAPI.Models;
 
@@ -12,9 +14,11 @@ public class Product : IValidatableObject
     [Required, StringLength(80)]
     public string Description { get; set; } = string.Empty;
 
-    [Required]
+    [Required, Column(TypeName = "decimal(10,2)")]
     public double Price { get; set; }
-    public double Stock { get; set; }
+
+    [Required]
+    public int Stock { get; set; }
     public DateTime? DeletedAt { get; set; }
     public DateTime CreatedAt { get; set; }
 
