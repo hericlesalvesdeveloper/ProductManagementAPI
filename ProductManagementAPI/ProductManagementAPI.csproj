@@ -4,14 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>3395cf7f-f8dc-40c0-ac89-53dc2f82c493</UserSecretsId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="NovaPasta\**" />
-    <Content Remove="NovaPasta\**" />
-    <EmbeddedResource Remove="NovaPasta\**" />
-    <None Remove="NovaPasta\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.25">
@@ -28,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="Filters\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using ProductManagementAPI.Exceptions;
 using ProductManagementAPI.Models;
-using System.Net;
 using System.Text.Json;
 
 namespace ProductManagementAPI.Middlewares;
@@ -30,11 +29,19 @@ public class ExceptionMiddleware
         {
             _logger.LogError(ex, ex.Message);
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+
+            var statusCode = ex switch
+            {
+                NotFoundException => context.Response.StatusCode = StatusCodes.Status404NotFound,
+                BadRequestException => context.Response.StatusCode = StatusCodes.Status400BadRequest,
+                BussinesException => context.Response.StatusCode = StatusCodes.Status400BadRequest,
+                _ => StatusCodes.Status500InternalServerError
+                
+            };
 
             var response = _env.IsDevelopment() ?
-                new ErrorDetails(context.Response.StatusCode, ex.Message, ex.StackTrace) :
-                new ErrorDetails(context.Response.StatusCode, "...", "Internal Server Error");
+                new ErrorDetails(statusCode, ex.Message, ex.StackTrace) :
+                new ErrorDetails(statusCode, "...", "Internal Server Error");
 
             var json = JsonSerializer.Serialize(response);
              

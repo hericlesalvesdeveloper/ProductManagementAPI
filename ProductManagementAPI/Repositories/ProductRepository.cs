@@ -5,7 +5,7 @@ using ProductManagementAPI.Models;
 
 namespace ProductManagementAPI.Repositories;
 
-public class ProductRepository : IRepository
+public class ProductRepository : IProductRepository
 {
     private readonly ProductContext _context;
 
@@ -17,6 +17,8 @@ public class ProductRepository : IRepository
     {
         await _context.Products.AddAsync(product);
         product.CreatedAt = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync();
 
         return product;
     }
@@ -30,6 +32,8 @@ public class ProductRepository : IRepository
 
         product.DeletedAt = DateTime.UtcNow;
 
+        await _context.SaveChangesAsync();
+
         return true;
         
     }
@@ -38,6 +42,9 @@ public class ProductRepository : IRepository
     {
         return await _context
             .Products
+            .OrderBy(p => p.Id)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
     }
 
@@ -48,9 +55,9 @@ public class ProductRepository : IRepository
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public async Task<bool> UpdateAsync(Product product)
+    public async Task<bool> UpdateAsync(int id, Product product)
     {
-        var productExists = await GetByIdAsync(product.Id);
+        var productExists = await GetByIdAsync(id);
 
         if (productExists is null) return false;
 
