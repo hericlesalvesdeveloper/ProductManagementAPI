@@ -13,6 +13,7 @@ public class ProductRepository : IProductRepository
     {
         _context = context;
     }
+
     public async Task<Product> CreateAsync(Product product)
     {
         await _context.Products.AddAsync(product);
@@ -55,20 +56,23 @@ public class ProductRepository : IProductRepository
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
+    public async Task<Product?> GetByNameAsync(string name)
+    {
+        return await _context
+            .Products
+            .FirstOrDefaultAsync(p => p.Name == name);
+    }
+
     public async Task<bool> UpdateAsync(int id, Product product)
     {
         var productExists = await GetByIdAsync(id);
 
         if (productExists is null) return false;
 
-        productExists.Name = product.Name;
-        productExists.Description = product.Description;
-        productExists.Price = product.Price;
-        productExists.Stock = product.Stock;
+       _context.Entry(productExists).State = EntityState.Modified;
 
         await _context.SaveChangesAsync();
 
         return true;
-
     }
 }

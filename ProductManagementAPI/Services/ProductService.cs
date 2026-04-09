@@ -15,7 +15,9 @@ public class ProductService : IProductService
 
     public async Task<Product> CreateAsync(Product product)
     {
+        if (product is null) throw new ArgumentNullException(nameof(product));
         if (product.Price <= 0) throw new BussinesException("The price of product has to be greater than zero!");
+
         return await _productRepository.CreateAsync(product);
     }
 
@@ -42,6 +44,13 @@ public class ProductService : IProductService
         ?? throw new NotFoundException("Product Not Found");
 
         return productExists;
+    }
+
+    public async Task<Product?> GetByNameAsync(string name)
+    {
+        if(name is null) throw new NullReferenceException(nameof(name));
+
+        return await _productRepository.GetByNameAsync(name);
     }
 
     public async Task UpdateAsync(int id, Product product)

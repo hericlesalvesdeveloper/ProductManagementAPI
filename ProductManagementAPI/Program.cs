@@ -4,7 +4,6 @@ using ProductManagementAPI.Interfaces;
 using ProductManagementAPI.Middlewares;
 using ProductManagementAPI.Repositories;
 using ProductManagementAPI.Services;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
